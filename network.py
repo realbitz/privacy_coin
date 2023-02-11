@@ -6,8 +6,8 @@ def encrypt(data):
     fernet = Fernet(key)
     encMessage = fernet.encrypt(data.encode())
     return encMessage
-  
-#E any data that goes through this function
+
+#Decrypt any data that goes through this function
 def decrypt(data):
     decMessage = fernet.decrypt(data).decode()
     return decMessage

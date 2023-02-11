@@ -1,3 +1,3 @@
 # The Cabbage Network
-![logo](https://user-images.githubusercontent.com/112826187/218271370-064aafa1-c0b2-471b-a7b3-e2f11eeda78f.jpg)
+![logo copy](https://user-images.githubusercontent.com/112826187/218271538-e5acea67-6cc2-4b04-b3c4-d329d4a33848.png)
 The cabbage network is a securely encrypted network that can be used in infinite ways.

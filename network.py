@@ -6,14 +6,11 @@ hashes = ["0"]
 now = datetime.now()
 date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 
-def return_hashes():
-    return hashes
-
 def add_block(data):
     transaction_number = 0
     
     transaction_number+=1
-    transaction_data = data + date_time
+    transaction_data = data + " " + date_time
     hash_object = hashlib.sha256(transaction_data.encode())
     block_hash = hash_object.hexdigest()
     hashes.append(block_hash)
@@ -37,6 +34,6 @@ def create_genisis_block():
 
 def run_network():
     create_genisis_block()
-    add_block("Harl to max 1")
+    add_block("Person 1 to person 2")
     
 run_network()

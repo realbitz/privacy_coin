@@ -1,39 +1,52 @@
 from datetime import datetime
+import time
 import sys
 import hashlib
 
-hashes = ["0"]
+cabbages = ["0"]
 now = datetime.now()
 date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 
-def add_block(data):
-    transaction_number = 0
-    
-    transaction_number+=1
-    transaction_data = data + " " + date_time
-    hash_object = hashlib.sha256(transaction_data.encode())
-    block_hash = hash_object.hexdigest()
-    hashes.append(block_hash)
-    prev_hash = hashes[-2]
+def calculate_hash(zeros):
+    target = '0' * zeros + '1' * (64 - zeros)
+    nonce = 0
+    while True:
+        data = f"Cabbage network is the best{int(time.time())}{nonce}"
+        result = hashlib.sha256(data.encode()).hexdigest()
+        if result[:zeros] == target[:zeros]:
+            return result
+        nonce += 1
 
-    print("Transaction ID: ", transaction_data)
-    print("Transaction Number: ", transaction_number)
+def create_cabbage(data):
+    difficulty = 4
+    cabbage_number = 0
+    current_leaf = 0
+    cabbage_number+=1
+    cabbage_id = data + " " + date_time
+
+    cabbages.append(cabbage_id)
+    prev_cabbage = cabbages[-2]
+
+    print("Cabbage ID: ", cabbage_id)
+    print("Cabbage Number: ", cabbage_number)
     print("Timestamp: ", datetime.now())
-    print("Hash: ", block_hash)
-    print("Previous Hash: ", prev_hash)
+    while current_leaf != difficulty:
+        current_leaf+=1
+        print("Leaf; ", current_leaf, " hash; ", calculate_hash(current_leaf))
+    print("Cabbage Completed")
     print("\n")
-    
-    if block_hash == hashes[-1] and prev_hash == hashes[-2]:
+
+    if cabbage_id == cabbages[-1] and prev_cabbage == cabbages[-2]:
         print("Chain is valid \n")
     else:
         print("Chain is not valid \n")
         sys.exit()
 
 def create_genisis_block():
-    add_block("Genisis Block")
+    create_cabbage("Genisis Block")
 
 def run_network():
     create_genisis_block()
-    add_block("Person 1 to person 2")
+    create_cabbage("Person 1 to person 2")
     
 run_network()

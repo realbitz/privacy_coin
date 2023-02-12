@@ -47,6 +47,6 @@ def create_genisis_block():
 
 def run_network():
     create_genisis_block()
-    create_cabbage("Person 1 to person 2")
+    create_cabbage("Test transaction")
     
 run_network()

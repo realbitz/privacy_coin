@@ -18,10 +18,11 @@ def calculate_hash(zeros):
         nonce += 1
 
 def create_cabbage(data):
-    difficulty = 4
     cabbage_number = 0
+    difficulty = 4
     current_leaf = 0
-    cabbage_number+=1
+
+    cabbage_number += 1
     cabbage_id = data + " " + date_time
 
     cabbages.append(cabbage_id)
@@ -31,7 +32,7 @@ def create_cabbage(data):
     print("Cabbage Number: ", cabbage_number)
     print("Timestamp: ", datetime.now())
     while current_leaf != difficulty:
-        current_leaf+=1
+        current_leaf += 1
         print("Leaf; ", current_leaf, " hash; ", calculate_hash(current_leaf))
     print("Cabbage Completed")
     print("\n")
@@ -42,11 +43,8 @@ def create_cabbage(data):
         print("Chain is not valid \n")
         sys.exit()
 
-def create_genisis_block():
-    create_cabbage("Genisis Block")
-
 def run_network():
-    create_genisis_block()
+    create_cabbage("Genisis Block")
     create_cabbage("Test transaction")
     
 run_network()

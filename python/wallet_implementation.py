@@ -1,5 +1,6 @@
+#This is a work in progress
 def create_cabbage(sender, reciver, amount):
-    cabbage_data = sender, " sent ", amount " to ", reciver
+    cabbage_data = sender, " sent ", amount, " to ", reciver
     hashlib.sha256(cabbage_data.encode()).hexdigest()
 
     print("Cabbage Data: ", cabbage_data)

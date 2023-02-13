@@ -1,19 +1,75 @@
-#This is a work in progress
-def create_cabbage(sender, reciver, amount):
-    cabbage_data = sender, " sent ", amount, " to ", reciver
-    hashlib.sha256(cabbage_data.encode()).hexdigest()
+import hashlib
+import json
+import time
 
-    print("Cabbage Data: ", cabbage_data)
+class Blockchain:
+    def __init__(self):
+        self.chain = []
+        self.pending_transactions = []
+        self.wallets = {}
 
-    target = '0' * zeros + '1' * (64 - zeros)
-    nonce = 0
-    while True:
-        data = f"Cabbage network is the best{int(time.time())}{nonce}"
-        result = hashlib.sha256(data.encode()).hexdigest()
-        if result[:zeros] == target[:zeros]:
-            return result
-        nonce += 1
-    
-    while current_leaf != difficulty:
-        current_leaf += 1
-        print("Leaf; ", current_leaf, " hash; ", calculate_hash(current_leaf))
+        # create genesis block
+        self.add_block(previous_hash='')
+
+    def add_block(self, previous_hash):
+        block = {
+            'index': len(self.chain),
+            'timestamp': time.time(),
+            'transactions': self.pending_transactions,
+            'previous_hash': previous_hash,
+        }
+        block['hash'] = self.hash(block)
+        self.chain.append(block)
+        self.pending_transactions = []
+
+    def hash(self, block):
+        block_string = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(block_string).hexdigest()
+
+    def add_transaction(self, sender, recipient, amount):
+        self.pending_transactions.append({
+            'sender': sender,
+            'recipient': recipient,
+            'amount': amount,
+        })
+
+    def create_wallet(self, wallet_id):
+        self.wallets[wallet_id] = 0
+
+    def get_wallet_balance(self, wallet_id):
+        if wallet_id not in self.wallets:
+            return None
+        balance = self.wallets[wallet_id]
+        for block in self.chain:
+            for tx in block['transactions']:
+                if tx['sender'] == wallet_id:
+                    balance -= tx['amount']
+                if tx['recipient'] == wallet_id:
+                    balance += tx['amount']
+        return balance
+
+    def send(self, sender, recipient, amount):
+        if sender not in self.wallets:
+            return False
+        if self.wallets[sender] < amount:
+            return False
+        self.add_transaction(sender, recipient, amount)
+        self.wallets[sender] -= amount
+        self.wallets[recipient] += amount
+        return True
+
+# create blockchain and wallets
+bc = Blockchain()
+bc.create_wallet('Alice')
+bc.create_wallet('Bob')
+
+# check initial balances
+print('Alice balance:', bc.get_wallet_balance('Alice'))
+print('Bob balance:', bc.get_wallet_balance('Bob'))
+
+# transfer funds from Alice to Bob
+bc.send('Alice', 'Bob', 10)
+
+# check new balances
+print('Alice balance:', bc.get_wallet_balance('Alice'))
+print('Bob balance:', bc.get_wallet_balance('Bob'))

@@ -18,18 +18,16 @@ def calculate_hash(zeros):
         nonce += 1
 
 def create_cabbage(data):
-    cabbage_number = 0
     difficulty = 4
     current_leaf = 0
 
-    cabbage_number += 1
-    cabbage_id = data + " " + date_time
+    cabbage_data = data + " " + date_time
+    cabbage_id = hashlib.sha256(cabbage_data.encode()).hexdigest()
 
     cabbages.append(cabbage_id)
     prev_cabbage = cabbages[-2]
 
     print("Cabbage ID: ", cabbage_id)
-    print("Cabbage Number: ", cabbage_number)
     print("Timestamp: ", datetime.now())
     while current_leaf != difficulty:
         current_leaf += 1

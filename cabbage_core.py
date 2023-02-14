@@ -1,20 +1,27 @@
 import hashlib
 import datetime
+import time
 
 class Cabbage:
+
     def __init__(self, data, previous_hash):
         self.timestamp = datetime.datetime.now()
         self.data = data
         self.previous_hash = previous_hash
         self.hash = self.calculate_hash()
-
+    
     def calculate_hash(self):
-        data = str(self.timestamp) + str(self.data) + str(self.previous_hash)
-        sha = hashlib.sha256(data.encode()).hexdigest()
-        return sha
+        difficulty = 4
+        target = '0' * difficulty + '1' * (64 - difficulty)
+        nonce = 0
+        while True:
+            data = f"Cabbage network is the best{int(time.time())}{nonce}"
+            result = hashlib.sha256(data.encode()).hexdigest()
+            if result[:difficulty] == target[:difficulty]:
+                return result
+            nonce += 1
 
 class Blockchain:
-    difficulty = 4
 
     def __init__(self):
         self.chain = [self.create_genesis_block()]

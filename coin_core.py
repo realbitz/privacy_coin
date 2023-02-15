@@ -1,5 +1,6 @@
 import hashlib
 import random
+import string
 import os
 
 def update_user_key(key, new_key, priv_key):
@@ -17,14 +18,16 @@ def update_user_key(key, new_key, priv_key):
 def create_user_identification(username, password):
     wallet_balance = 0
     combined_data = username + " " + password + " "
-    random_num = hash = random.getrandbits(128)
-    private_key = hashlib.sha256(random_num.encode()).hexdigest()
+
+    private_key = "testkey"
     user_key = hashlib.sha256(combined_data.encode()).hexdigest()
 
-    key_path = "/user_data/user_keys/" + priv_key + ".txt"
+    key_path = "/user_data/user_keys/" + private_key + ".txt"
     f = open(key_path, "w")
     f.write(user_key)
     f.close()
     
     print("YOUR USER KEY IS: ", user_key)
     print("YOUR PRIVATE KEY IS: ", private_key)
+
+create_user_identification("Maxim_Shevchenko", "Lol")

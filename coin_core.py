@@ -30,4 +30,4 @@ def create_user_identification(username, password):
     print("YOUR USER KEY IS: ", user_key)
     print("YOUR PRIVATE KEY IS: ", private_key)
 
-create_user_identification("Maxim_Shevchenko", "Lol")
+create_user_identification("Testuser", "123")

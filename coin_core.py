@@ -44,3 +44,8 @@ def update_user_identification(user_key, new_user_key, private_key):
                 write_file = open("/user_data/user_keys.txt", "w")
                 write_file.write(replaced_content)
                 write_file.close()
+
+def generate_new_user_key(username, password, wallet_balance):
+    combined_data = username + " " + password + " " + wallet_balance
+    new_user_key = hashlib.sha256(combined_data.encode()).hexdigest()
+    print("NEW USER KEY:")

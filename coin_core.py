@@ -29,7 +29,6 @@ def generate_user_identification():
 def update_user_identification(user_key, new_user_key, private_key):
     with open("/user_data/private_keys.txt", 'r') as priv_keys:
         with open("/user_data/user_keys.txt", r) as usr_keys:
-
             private_keys = priv_keys.read()
             user_keys = usr_keys.read()
             if private_key in private_keys and user_key in user_keys:

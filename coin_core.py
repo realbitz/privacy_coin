@@ -11,8 +11,6 @@ def generate_user_id():
     
     print(user_key)
 
-
-
 def send():
     sender_key = input("Enter sender key: ")
     reciver_key = input("Enter reciver key: ")
@@ -28,7 +26,8 @@ def send():
             if amount > sender_balance:
                 print("Error not enough funds; ", sender_balance, " is smaller then ", amount)
             else:
-                pass
+                f = open("user_keys.txt"):
+                f.wr
         else:
             print("Invalid sender or reciver key")
 

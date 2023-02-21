@@ -1,4 +1,5 @@
 import hashlib
+import time
 
 def generate_user_id():
     wallet_balance = "0"
@@ -21,24 +22,32 @@ def send():
     reciver_key = input("Enter reciver key: ")
     amount = input("Enter amount to send: ")
 
-    res = sender_key.split("_", 1)
-    sender_balance = res[1]
+    s = sender_key.split("_", 1)
+    sender_balance = s[1]
+
+    r = reciver_key.split("_", 1)
+    reciver_balance = r[1]
 
     with open("user_keys.txt") as user_keys:
         keys = user_keys.read()
 
         if sender_key and reciver_key in keys:
             if amount > sender_balance:
-                print("Error not enough funds; ", sender_balance, " is smaller then ", amount)
+                print("Error not enough funds")
             else:
-                new_balance = sender_balance - str(amount)
+                new_sender_balance = int(sender_balance) - int(amount)
+                new_reciver_balance = int(reciver_balance) + int(amount)
                 with open('user_keys.txt', 'r') as user_keys :
                     keys = user_keys.read()
 
-                    filedata = filedata.replace(sender_balance, new_balace)
+                    replace_sender_key = keys.replace(sender_balance, str(new_sender_balance))
+                    replace_reciver_key = keys.replace(reciver_balance, str(new_reciver_balance))
 
                 with open('user_keys.txt', 'w') as file:
-                    file.write(filedata)
+                    file.write(replace_sender_key)
+                time.sleep(10)
+                with open('user_keys.txt', 'w') as file:
+                    file.write(replace_reciver_key)
         else:
             print("Invalid sender or reciver key")
 

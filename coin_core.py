@@ -8,8 +8,13 @@ def generate_user_id():
     username_n_password = username + password
     user_key_prefix = hashlib.sha256(username_n_password.encode()).hexdigest()
     user_key = user_key_prefix + "_" + wallet_balance
+
+    f = open("userkeys.txt")
+    f.write(user_key)
+    f.write("\n")
+    f.close()
     
-    print(user_key)
+    print("Your key: (remember it)", user_key)
 
 def send():
     sender_key = input("Enter sender key: ")
@@ -26,9 +31,15 @@ def send():
             if amount > sender_balance:
                 print("Error not enough funds; ", sender_balance, " is smaller then ", amount)
             else:
-                f = open("user_keys.txt"):
-                f.wr
+                new_balance = int(sender_balance) - amount
+                with open('user_keys.txt', 'r') as user_keys :
+                    keys = user_keys.read()
+
+                    filedata = filedata.replace(sender_balance, new_balace)
+
+                with open('user_keys.txt', 'w') as file:
+                    file.write(filedata)
         else:
             print("Invalid sender or reciver key")
 
-send()
+generate_user_id()

@@ -1,7 +1,5 @@
 # Privacy Coin
 
-  
-
 As said in the name, privacy coin is based on privacy, all of the transactions are made will be encrypted and untraceable. This coin uses a unique system of user keys that identify the user. Privacy coin uses a primitive but secure way of storing your account balance, it latches the balance on the end of the user key, however a key can not be changed physically so no "fake" PRC will be on the chain;
 ```mermaid
 sequenceDiagram

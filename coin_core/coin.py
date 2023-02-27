@@ -8,14 +8,17 @@ def generate_user_id():
     
     user_key_prefix = hashlib.sha256((username + password).encode()).hexdigest()
     user_key = f"{user_key_prefix}_{wallet_balance}"
+    private_key = hashlib.sha256(user_key.encode()).hexdigest()
 
     with open("user_keys.txt", "a") as f:
-        f.write(user_key + "\n")
+        f.write(user_key + "." + private_key + "\n")
     
     print("Your key: (remember it)", user_key)
+    print("YOUR PRIVATE KEY (KEEP THIS SAFE:) ", private_key)
 
 def send():
     sender_key = input("Enter sender key: ")
+    sender_private_key = input("Enter sender private key: ")
     receiver_key = input("Enter receiver key: ")
     amount = int(input("Enter amount to send: "))
 
@@ -47,6 +50,14 @@ def send():
         print("Error not enough funds")
         return
 
+    if sender_key_parts[0] != sender_key or receiver_key_parts[0] != receiver_key:
+        print("Error private key does not match user key")
+        return
+
+    if hashlib.sha256(sender_key.encode()).hexdigest() != sender_private_key:
+        print("Error incorrect private key")
+        return
+
     new_sender_balance = sender_balance - amount
     new_receiver_balance = receiver_balance + amount
 
@@ -60,5 +71,3 @@ def send():
         user_keys.writelines(keys)
 
     print("Transaction successful!")
-
-send()

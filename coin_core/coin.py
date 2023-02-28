@@ -1,73 +1,78 @@
 import hashlib
 import time
 
-def generate_user_id():
+def create_wallet(username, password):
     wallet_balance = "0"
-    username = input("Enter username: ")
-    password = input("Enter password: ")
-    
-    user_key_prefix = hashlib.sha256((username + password).encode()).hexdigest()
-    user_key = f"{user_key_prefix}_{wallet_balance}"
-    private_key = hashlib.sha256(user_key.encode()).hexdigest()
+    user_key_prefix = hashlib.sha256((username + password).encode()).decode()
+    user_key = user_key_prefix + wallet_balance
+    private_key = hashlib.sha256(user_key.encode()).decode()
 
-    with open("user_keys.txt", "a") as f:
-        f.write(user_key + "." + private_key + "\n")
-    
-    print("Your key: (remember it)", user_key)
-    print("YOUR PRIVATE KEY (KEEP THIS SAFE:) ", private_key)
+    print("Your user key: ", user_key)
+    print("Your private key: ", private_key)
 
-def send():
-    sender_key = input("Enter sender key: ")
-    sender_private_key = input("Enter sender private key: ")
-    receiver_key = input("Enter receiver key: ")
-    amount = int(input("Enter amount to send: "))
+    f = open("userdata.txt", "a")
+    f.write(user_key + "." + private_key + "\n")
+    f.close()
 
-    with open("user_keys.txt", "r") as user_keys:
-        keys = user_keys.readlines()
+def send(sender_key, sender_private_key, receiver_key, amount):
+    with open("userdata.txt") as file:
+        contents = file.readlines()
 
     sender_index = -1
     receiver_index = -1
-    for i, key in enumerate(keys):
-        if key.startswith(sender_key):
+    for i, line in enumerate(contents):
+        user_key, private_key = line.strip().split(".")
+        if sender_key == user_key and sender_private_key == private_key:
             sender_index = i
-        elif key.startswith(receiver_key):
+        elif receiver_key == user_key:
             receiver_index = i
 
-        if sender_index != -1 and receiver_index != -1:
-            break
-
     if sender_index == -1 or receiver_index == -1:
-        print("Invalid sender or receiver key")
+        print("Invalid data either: (sender key, sender priv key or receiver key)")
         return
 
-    sender_key_parts = keys[sender_index].strip().split("_")
-    receiver_key_parts = keys[receiver_index].strip().split("_")
+    sender_user_key, sender_private_key = contents[sender_index].strip().split(".")
+    receiver_user_key, receiver_private_key = contents[receiver_index].strip().split(".")
 
-    sender_balance = int(sender_key_parts[1])
-    receiver_balance = int(receiver_key_parts[1])
+    sender_balance = int(sender_user_key.split("_")[1])
+    receiver_balance = int(receiver_user_key.split("_")[1])
 
-    if sender_balance < amount:
-        print("Error not enough funds")
+    if amount > sender_balance:
+        print("Not enough balance")
         return
 
-    if sender_key_parts[0] != sender_key or receiver_key_parts[0] != receiver_key:
-        print("Error private key does not match user key")
-        return
+    sender_balance -= amount
+    receiver_balance += amount
 
-    if hashlib.sha256(sender_key.encode()).hexdigest() != sender_private_key:
-        print("Error incorrect private key")
-        return
+    new_sender_user_key = f"{sender_user_key.split('_')[0]}_{sender_balance}"
+    new_receiver_user_key = f"{receiver_user_key.split('_')[0]}_{receiver_balance}"
 
-    new_sender_balance = sender_balance - amount
-    new_receiver_balance = receiver_balance + amount
+    new_sender_key = new_sender_user_key + sender_private_key
+    new_receiver_key = new_receiver_user_key + receiver_private_key
 
-    sender_key_parts[1] = str(new_sender_balance)
-    receiver_key_parts[1] = str(new_receiver_balance)
+    contents[sender_index] = new_sender_key + "\n"
+    contents[receiver_index] = new_receiver_key + "\n"
 
-    keys[sender_index] = "_".join(sender_key_parts) + "\n"
-    keys[receiver_index] = "_".join(receiver_key_parts) + "\n"
+    with open("userdata.txt", "w") as file:
+        file.writelines(contents)
 
-    with open("user_keys.txt", "w") as user_keys:
-        user_keys.writelines(keys)
+    print("Transaction successful")
 
-    print("Transaction successful!")
+def mine(miner_key):
+    difficulty = "00"
+    nonce = 0
+    
+    with open("userdata.txt") as file:
+        contents = file.read()
+        if miner_key in contents:
+            while True:
+                current_time = int(time.time())
+                message = str(nonce) + str(current_time)
+                hash_result = hashlib.sha256(message.encode('utf-8')).hexdigest()
+                if hash_result[:2] == "000":
+                    print("Hash found: " + hash_result)
+                    send("MASTERNODE_10000", "masternodeprivkey", miner_key, 1)
+                    print("REWARD RECIVED")
+                nonce += 1
+        else:
+            print("Invalid Miner key")

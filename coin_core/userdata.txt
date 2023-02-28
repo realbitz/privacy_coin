@@ -1,0 +1,1 @@
+MASTERNODE_10000.masternodeprivkey

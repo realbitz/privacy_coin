@@ -59,7 +59,6 @@ def send(sender_key, sender_private_key, receiver_key, amount):
     print("Transaction successful")
 
 def mine(miner_key):
-    difficulty = "00"
     nonce = 0
     
     with open("userdata.txt") as file:

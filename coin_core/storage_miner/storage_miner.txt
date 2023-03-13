@@ -1,0 +1,5 @@
+Storage Miner
+
+The Storage miner is a python script which will mine/farm/generate MOOK Coin onto your wallet,
+the script will show you an installation process and once you're done with the setup, you are ready to go,
+you can start generating MOOK!, it will show you “farming speed” everything you need to know in the miner!

@@ -1,0 +1,6 @@
+PC miner
+
+The PC miner is straight forward, you enter your wallet address, and mine, 
+there is no such thing as a pool because the difficulty is still very very low,
+however if you are still struggling you can consider purchasing a dedicated mining machine that can run this MOOK miner, 
+or use the HDD/Storage mining - where any device can be a miner!

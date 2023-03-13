@@ -1,0 +1,4 @@
+MOOK Wallet
+
+The MOOK Wallet allows you to send and receive MOOK Coins, as well as create new wallets, 
+and we at MOOK are going to be adding more functionality later!
